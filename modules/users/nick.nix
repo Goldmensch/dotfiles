@@ -31,4 +31,6 @@
     enable = true;
     user = "nick";
   };
+
+  nix.settings.trusted-users = [ "nick" ];
 }

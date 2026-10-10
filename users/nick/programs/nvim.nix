@@ -1,21 +1,7 @@
 { pkgs, ... }: {
-  programs.lazyvim = {
-    enable = true;
-    extras = {
-      lang.nix.enable = true;
-    };
-
-    extraPackages = with pkgs; [
-      nixd
-      nixfmt
-      statix
-    ];
-  };
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-  };
+  imports = [
+    ../../../modules/home-manager/programs/nvim.nix
+  ];
 
   xdg.desktopEntries.nvim = {
     name = "Neovim";

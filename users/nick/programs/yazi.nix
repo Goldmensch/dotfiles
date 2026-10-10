@@ -1,7 +1,9 @@
 { pkgs, ... }: {
+  imports = [
+    ../../../modules/home-manager/programs/yazi.nix
+  ];
+
   programs.yazi = {
-    enable = true;
-    enableZshIntegration = true;
     plugins = with pkgs.yaziPlugins; {
       gh-clipboard.package = clipboard;
     };

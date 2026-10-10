@@ -21,6 +21,31 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # homeserver
+    rasp = {
+      url = "github:nvmd/nixos-raspberrypi/main";
+      # inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixos-anywhere = {
+      url = "github:nix-community/nixos-anywhere";
+      #inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    disko = {
+      url = "github:nix-community/disko";
+      #inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  nixConfig = {
+    extra-substituters = [
+      "https://nixos-raspberrypi.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+    ];
   };
 
   outputs =
@@ -31,6 +56,9 @@
       lazyvim,
       nur,
       agenix,
+      nixos-anywhere,
+      rasp,
+      disko,
       ...
     }@inputs:
     let
@@ -46,6 +74,12 @@
         nixpkgs.overlays = [ nur.overlays.default ];
       };
 
+      agenix-conf = {
+        imports = [
+          agenix.nixosModules.default
+        ];
+      };
+
       personal-system =
         { modules }:
         nixpkgs.lib.nixosSystem {
@@ -57,12 +91,6 @@
           ]
           ++ modules;
         };
-
-      agenix-conf = {
-        imports = [
-          agenix.nixosModules.default
-        ];
-      };
 
       system_64 = "x86_64-linux";
     in
@@ -93,18 +121,43 @@
               with pkgs;
               [
                 git
-                inputs.agenix.packages.x86_64-linux.default
+                agenix.packages.x86_64-linux.default
+                age-plugin-yubikey
+                nixos-anywhere.packages.x86_64-linux.default
               ]
               ++ builtins.attrValues scripts;
           };
         };
 
-      nixosConfigurations.computhor = personal-system {
-        modules = [ ./hosts/personal/computhor ];
-      };
+      nixosConfigurations = {
+        # main pc
+        computhor = personal-system {
+          modules = [ ./hosts/personal/computhor ];
+        };
 
-      nixosConfigurations.roberto = personal-system {
-        modules = [ ./hosts/personal/roberto ];
+        # laptop
+        roberto = personal-system {
+          modules = [ ./hosts/personal/roberto ];
+        };
+
+        # pi4 home server
+        homeserver = rasp.lib.nixosSystem {
+          specialArgs = inputs;
+          modules = [
+            {
+              imports = with rasp.nixosModules; [
+                raspberry-pi-4.base
+                raspberry-pi-4.bluetooth
+
+                agenix.nixosModules.default
+                disko.nixosModules.disko
+
+                ./hosts/homeserver
+                hm-conf
+              ];
+            }
+          ];
+        };
       };
     };
 }

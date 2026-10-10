@@ -2,13 +2,14 @@
   imports = [
     ./git.nix
     ./gpg.nix
-    ./zsh.nix
+    ./yazi.nix
     ./firefox.nix
     ./direnv.nix
     ./ssh.nix
     ./nvim.nix
-    ./yazi.nix
+    ../../../modules/home-manager/programs/yazi.nix
     ./kitty.nix
+    ../../../modules/home-manager/programs/zsh.nix
   ];
 
   programs = {
