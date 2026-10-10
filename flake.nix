@@ -78,5 +78,15 @@
           ./hosts/personal/computhor
         ];
       };
+
+      nixosConfigurations.roberto = nixpkgs.lib.nixosSystem {
+        system = system_64;
+        specialArgs = inputs;
+        modules = [
+          hm-conf
+          nur-conf
+          ./hosts/personal/roberto
+        ];
+      };
     };
 }
