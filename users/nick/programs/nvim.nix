@@ -12,6 +12,11 @@
     ];
   };
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   xdg.desktopEntries.nvim = {
     name = "Neovim";
     genericName = "Text Editor";

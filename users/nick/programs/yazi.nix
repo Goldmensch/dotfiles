@@ -1,8 +1,39 @@
-{
+{ pkgs, ... }: {
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
+    plugins = with pkgs.yaziPlugins; {
+      gh-clipboard.package = clipboard;
+    };
+
+    keymap.mgr.prepend_keymap = [
+      {
+        on = [ "y" ];
+        run = [
+          "yank"
+          "plugin gh-clipboard -- --action=copy"
+        ];
+        desc = "Yank selected files (copy)";
+      }
+      {
+        on = [ "x" ];
+        run = [
+          "yank"
+          "plugin gh-clipboard -- --action=copy"
+        ];
+        desc = "Yank selected files (cut)";
+      }
+      {
+        on = [ "C-p" ];
+        run = [ "plugin gh-clipboard -- --action=paste" ];
+        desc = "Paste yanked system clipboard files";
+      }
+    ];
   };
+
+  home.packages = with pkgs; [
+    wl-clipboard
+  ];
 
   xdg.desktopEntries.yazi = {
     name = "Yazi File Manager";

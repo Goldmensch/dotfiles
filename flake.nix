@@ -16,6 +16,11 @@
       url = "github:nix-community/nur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -25,6 +30,7 @@
       home-manager,
       lazyvim,
       nur,
+      agenix,
       ...
     }@inputs:
     let
@@ -38,6 +44,24 @@
 
       nur-conf = {
         nixpkgs.overlays = [ nur.overlays.default ];
+      };
+
+      personal-system =
+        { modules }:
+        nixpkgs.lib.nixosSystem {
+          system = system_64;
+          specialArgs = inputs;
+          modules = [
+            hm-conf
+            nur-conf
+          ]
+          ++ modules;
+        };
+
+      agenix-conf = {
+        imports = [
+          agenix.nixosModules.default
+        ];
       };
 
       system_64 = "x86_64-linux";
@@ -65,28 +89,22 @@
         {
           x86_64-linux.default = pkgs.mkShell {
             name = "dotfiles";
-            packages = with pkgs; [ git ] ++ builtins.attrValues scripts;
+            packages =
+              with pkgs;
+              [
+                git
+                inputs.agenix.packages.x86_64-linux.default
+              ]
+              ++ builtins.attrValues scripts;
           };
         };
 
-      nixosConfigurations.computhor = nixpkgs.lib.nixosSystem {
-        system = system_64;
-        specialArgs = inputs;
-        modules = [
-          hm-conf
-          nur-conf
-          ./hosts/personal/computhor
-        ];
+      nixosConfigurations.computhor = personal-system {
+        modules = [ ./hosts/personal/computhor ];
       };
 
-      nixosConfigurations.roberto = nixpkgs.lib.nixosSystem {
-        system = system_64;
-        specialArgs = inputs;
-        modules = [
-          hm-conf
-          nur-conf
-          ./hosts/personal/roberto
-        ];
+      nixosConfigurations.roberto = personal-system {
+        modules = [ ./hosts/personal/roberto ];
       };
     };
 }
