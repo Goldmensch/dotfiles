@@ -11,6 +11,8 @@
   ];
 
   environment.cosmic.excludePackages = with pkgs; [
-    cosmic-term
+    cosmic-term # replaced by kitty
+    cosmic-edit # replaced by nvim
+    cosmic-files # replaced by yazi
   ];
 }

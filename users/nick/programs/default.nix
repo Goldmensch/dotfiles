@@ -6,7 +6,9 @@
     ./firefox.nix
     ./direnv.nix
     ./ssh.nix
-    ./vim.nix
+    ./nvim.nix
+    ./yazi.nix
+    ./kitty.nix
   ];
 
   programs = {

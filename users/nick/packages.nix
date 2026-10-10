@@ -17,13 +17,11 @@
     karere
 
     starship
-    alacritty
 
     gparted
 
     zip
     unzip
-
     jetbrains.idea
   ];
 }

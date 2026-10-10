@@ -16,7 +16,7 @@
     name = "Neovim";
     genericName = "Text Editor";
     comment = "Edit text files with Neovim";
-    exec = "alacritty -e nvim %F";
+    exec = "kitty nvim %F";
     terminal = false;
     type = "Application";
     icon = "nvim";
