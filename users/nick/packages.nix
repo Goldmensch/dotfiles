@@ -3,7 +3,7 @@
   home.packages = with pkgs; [
     efibootmgr
     sbctl
-  
+
     thunderbird
 
     parted
@@ -17,6 +17,7 @@
     karere
 
     starship
+    alacritty
 
     gparted
 

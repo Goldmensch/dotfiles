@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.lazyvim = {
     enable = true;
     extras = {
@@ -12,4 +12,35 @@
     ];
   };
 
+  xdg.desktopEntries.nvim = {
+    name = "Neovim";
+    genericName = "Text Editor";
+    comment = "Edit text files with Neovim";
+    exec = "alacritty -e nvim %F";
+    terminal = false;
+    type = "Application";
+    icon = "nvim";
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+    ];
+    mimeType = [
+      "text/plain"
+      "text/english"
+      "text/x-makefile"
+      "text/x-c++hdr"
+      "text/x-c++src"
+      "text/x-chdr"
+      "text/x-csrc"
+      "text/x-java"
+      "text/x-moc"
+      "text/x-pascal"
+      "text/x-tcl"
+      "text/x-tex"
+      "application/x-shellscript"
+      "text/x-c"
+      "text/x-c++"
+    ];
+  };
 }

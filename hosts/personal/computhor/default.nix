@@ -1,5 +1,6 @@
 {
   imports = [
+    ../../../modules/nixos/bootloader/limine.nix
     ../default.nix
     ./hardware.nix
     ../../../modules/nixos/wol/default.nix
