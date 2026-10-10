@@ -1,13 +1,16 @@
 {
-  boot.loader.limine = {
-    enable = true;
-    efiSupport = true;
-    maxGenerations = 10;
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    limine = {
+      enable = true;
+      efiSupport = true;
+      maxGenerations = 10;
 
-    extraEntries = ''
-      /Windows
-        protocol: efi_boot_entry
-        entry: Windows Boot Manager
-    '';
+      extraEntries = ''
+        /Windows
+          protocol: efi_boot_entry
+          entry: Windows Boot Manager
+      '';
+    };
   };
 }
