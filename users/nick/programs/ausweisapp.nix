@@ -1,0 +1,5 @@
+{
+  programs.ausweisapp = {
+    openFirewall = true;
+  };
+}
