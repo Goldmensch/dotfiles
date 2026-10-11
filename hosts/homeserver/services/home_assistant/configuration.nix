@@ -24,10 +24,6 @@ let
       }
     ) (builtins.attrNames (builtins.readDir p_lovelace_base))
   );
-  #better-minimalistic-area-card = pkgs.callPackage (
-  # p_base + "/better-minimalistic-area-card.nix"
-  #) { };
-  #better_thermostat-ui-card = pkgs.callPackage (p_base + "/better_thermostat-ui-card.nix") { };
 in
 {
   networking.firewall.allowedTCPPorts = [
