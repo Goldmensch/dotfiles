@@ -31,7 +31,7 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-            accept-flake-config = false
+            accept-flake-config = true
 
       - name: Configure Cachix
         uses: cachix/cachix-action@v15
@@ -42,6 +42,4 @@ jobs:
       - name: Build homeserver configuration
         run: |
           nix build \
-            .#nixosConfigurations.homeserver.config.system.build.toplevel \
-            --log-level info
-
+            .#nixosConfigurations.homeserver.config.system.build.toplevel
