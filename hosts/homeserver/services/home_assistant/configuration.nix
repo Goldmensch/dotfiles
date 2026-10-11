@@ -1,30 +1,41 @@
-{ pkgs, mainPkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 let
-  better-minimalistic-area-card =
-    pkgs.callPackage ./packages/lovelace/better-minimalistic-area-card.nix
-      { };
+  p_lovelace_base = ./../../../../packages/lovelace;
+
+  # usage example:
+  # {
+  #   better-minimalistic-area-card = { inerhit pkgs; }
+  # }
+  packageArgs = { };
+
+  lovelace_packages = builtins.listToAttrs (
+    builtins.map (
+      f:
+      let
+        name = builtins.replaceStrings [ ".nix" ] [ "" ] f;
+      in
+      {
+        inherit name;
+        value = pkgs.callPackage (p_lovelace_base + "/${f}") (packageArgs.${name} or { });
+      }
+    ) (builtins.attrNames (builtins.readDir p_lovelace_base))
+  );
+  #better-minimalistic-area-card = pkgs.callPackage (
+  # p_base + "/better-minimalistic-area-card.nix"
+  #) { };
+  #better_thermostat-ui-card = pkgs.callPackage (p_base + "/better_thermostat-ui-card.nix") { };
 in
 {
-  # because of test errors
-  nixpkgs.overlays = [
-    (final: prev: {
-      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-        (python-final: python-prev: {
-          paho-mqtt = python-prev.paho-mqtt.overridePythonAttrs (old: {
-            doCheck = false;
-          });
-        })
-      ];
-    })
-  ];
-
   networking.firewall.allowedTCPPorts = [
     8123
   ];
 
   services.home-assistant = {
-    package = mainPkgs.home-assistant;
+    package = pkgs.home-assistant;
     enable = true;
     extraComponents = [
       "analytics"
@@ -53,20 +64,21 @@ in
       "idasen_desk"
     ];
 
-    customComponents = with mainPkgs.home-assistant-custom-components; [
+    customComponents = with pkgs.home-assistant-custom-components; [
       localtuya
       better_thermostat
     ];
 
     customLovelaceModules =
-      with mainPkgs.home-assistant-custom-lovelace-modules;
+      with pkgs.home-assistant-custom-lovelace-modules;
       [
         mini-media-player
         mushroom
         vacuum-card
       ]
       ++ [
-        better-minimalistic-area-card
+        lovelace_packages.better-minimalistic-area-card
+        lovelace_packages.better-thermostat-ui-card
       ];
 
     config = {

@@ -37,6 +37,11 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    bun2nix = {
+      url = "github:nix-community/bun2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
@@ -64,6 +69,7 @@
       nixos-anywhere,
       rasp,
       disko,
+      bun2nix,
       ...
     }@inputs:
     let
@@ -125,10 +131,12 @@
             packages =
               with pkgs;
               [
+                bun
                 git
                 agenix.packages.x86_64-linux.default
                 age-plugin-yubikey
                 nixos-anywhere.packages.x86_64-linux.default
+                bun2nix.packages.x86_64-linux.default
               ]
               ++ builtins.attrValues scripts;
           };
@@ -155,6 +163,8 @@
           };
           modules = [
             {
+              nixpkgs.overlays = [ inputs.bun2nix.overlays.default ];
+
               imports = with rasp.nixosModules; [
                 raspberry-pi-4.base
                 raspberry-pi-4.bluetooth
