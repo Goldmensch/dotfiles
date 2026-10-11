@@ -24,7 +24,6 @@ jobs:
           remove_android: true
           remove_dotnet: true
           remove_haskell: true
-          remove_dotnet: true
           rm_cmd: "rmz"
  
       - name: Install Nix
