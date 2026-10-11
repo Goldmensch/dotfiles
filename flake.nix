@@ -25,26 +25,31 @@
     # homeserver
     rasp = {
       url = "github:nvmd/nixos-raspberrypi/main";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixos-anywhere = {
       url = "github:nix-community/nixos-anywhere";
-      #inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     disko = {
       url = "github:nix-community/disko";
-      #inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   nixConfig = {
     extra-substituters = [
       "https://nixos-raspberrypi.cachix.org"
+      "https://nix-community.cachix.org"
+      "https://goldmensch-homeserver.cachix.org"
+
     ];
     extra-trusted-public-keys = [
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "goldmensch-homeserver.cachix.org-1:oOfwXSVusF7sqV8Z+8XZzxNdyPphen7xI/XKenO6VpQ="
     ];
   };
 
@@ -142,7 +147,12 @@
 
         # pi4 home server
         homeserver = rasp.lib.nixosSystem {
-          specialArgs = inputs;
+          specialArgs = inputs // {
+            mainPkgs = import nixpkgs {
+              system = "aarch64-linux";
+              config.allowUnfree = true;
+            };
+          };
           modules = [
             {
               imports = with rasp.nixosModules; [

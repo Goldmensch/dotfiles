@@ -4,15 +4,15 @@ let
 in
 {
   age.secrets = {
-    mosquitto-hass-pw = {
-      file = base + "/mosquitto-hass-pw.age";
+    "mosquitto-hass-pw.yaml" = {
+      file = base + "/mosquitto-hass-pw.yaml.age";
       owner = "zigbee2mqtt";
       mode = r-mode;
     };
 
     cloudflared-token = {
       file = base + "/cloudflared-token.age";
-      owner = "cloiudflared";
+      owner = "cloudflared";
       mode = r-mode;
     };
   };

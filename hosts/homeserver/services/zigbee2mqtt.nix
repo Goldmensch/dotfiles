@@ -11,7 +11,7 @@
       mqtt = {
         server = "mqtt:localhost";
         user = "hass";
-        password = "!${config.age.secrets.mosquitto-hass-pw.path} pw";
+        password = "!${config.age.secrets."mosquitto-hass-pw.yaml".path} pw";
         base_topic = "zigbee2mqtt";
       };
 
