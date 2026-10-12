@@ -4,6 +4,9 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     autocd = true;
+    shellAliases = {
+      s = "kitten ssh";
+    };
     plugins = [
       {
         name = "zsh-completion";
